@@ -15,23 +15,33 @@
   app.use(express.static('./public'));
   app.use(express.urlencoded({ extended: true }));
 
-  function handleError(error, response) {
-    response.status(error.status || 500).send(error.message);
-  }
-
-  function getErrorHandler(response) {
-    return (error) => handleError(error, response);
+  function parseBook(bookData) {
+    const title = bookData.title ? bookData.title : 'Untitled';
+    const subtitle = bookData.subtitle;
+    const authors = bookData.authors ? bookData.authors.join(', ') : 'Unknown author';
+    const publisher = bookData.publisher;
+    const description = bookData.description ? bookData.description : 'No description';
+    const thumbnail = bookData.imageLinks.thumbnail ? bookData.imageLinks.thumbnail : 'https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg';
+    return new Book(title, subtitle, authors, publisher, description, thumbnail);
   }
 
   class Book {
     constructor(title, subtitle, authors, publisher, description, thumbnail) {
-      this.title = title;
+      this.title = title ? title : 'Untitled';
       this.subtitle = subtitle;
-      this.authors = authors;
+      this.authors = authors ? authors : 'Unknown Author';
       this.publisher = publisher;
-      this.description = description;
+      this.description = description ? description : 'No description';
       this.thumbnail = thumbnail;
     }
+  }
+
+  function handleError(res, error, status = 500) {
+    res.render('error', {status: status, error: error.message ? error.message : error});
+  }
+
+  function getErrorHandler(res, status = 500) {
+    return (error) => handleError(res, error, status);
   }
 
   app.get('/', (req, res) => {
@@ -40,32 +50,26 @@
 
   app.post('/searches', (req, res) => {
     try {
-      console.log(req.body);
       let query = req.body.query.replace(' ', '+');
-      if (req.body.search_type === 'author') {
+      if (req.body.search_type === 'title') {
+        query = `intitle:${query}`;
+      } else if (req.body.search_type === 'author') {
         query = `inauthor:${query}`;
       }
       superagent.get(`https://www.googleapis.com/books/v1/volumes?q=${query}`)
         .then(results => {
-          const books = results.body.items.map(book => new Book(book.volumeInfo.title, book.volumeInfo.subtitle, book.volumeInfo.authors, book.volumeInfo.publisher, book.volumeInfo.description, book.volumeInfo.imageLinks.thumbnail));
+          const books = results.body.items.map(book => parseBook(book.volumeInfo));
           res.render('results', { results: books });
         })
-        .catch(error => {
-          console.log(error);
-          res.render('error', { status: 500, error: error.message });
-        });
+        .catch(getErrorHandler(res));
     } catch (error) {
-      res.render('error', { status: 500, error: error.message });
+      handleError(res, error.message);
     }
   });
 
-  app.post('*', (req, res) => {
-    res.render('error', { status: 404, error: 'This path could not be found...' });
-  });
+  app.post('*', (req, res) => handleError(res, 'Path not found...', 404));
 
-  app.get('*', (req, res) => {
-    res.render('error', { status: 404, error: 'This path could not be found...' });
-  });
+  app.get('*', (req, res) => handleError(res, 'Path not found...', 404));
 
   const PORT = process.env.PORT || 3000;
   app.listen(PORT, () => {
