@@ -1,7 +1,7 @@
-# City-Explorer
+# Book-App
 
-**Author**: Jon Schwamman, Jacob Swenson, James Zobian, Calvin Hall, Steven Jones
-**Version**: 2.0.0
+**Author**: Calvin Hall
+**Version**: 1.0.1
 
 ## Overview
 This app retrieves information about events, bussinesses, hiking trails, movies and weather for a given location, and sends it to the client. 
