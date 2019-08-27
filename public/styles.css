@@ -21,8 +21,8 @@ h1 {
   font-size: 300%;
 }
 
-h3 {
-  width: 100%;
+h3.page-title {
+  min-width: 100%;
   font-size: 150%;
   background-color: #222222;
   text-align: center;
@@ -59,15 +59,36 @@ input[type=submit] {
 }
 
 article.book-preview {
+  color: rgb(39, 39, 39);
   border-radius: 15px;
-  width: 33%;
   min-height: 10vh;
   text-align: center;
-  margin: 5% auto;
+  margin: 5%;
   padding: 5%;
-  background-color: #666;
+  background-color: #DDD;
+  box-shadow: 0 0 15px #666;
+  text-shadow: 3px 3px 3px #AAA;
 }
 
 article.book-preview h2 {
+  color: #FFF;
   font-size: 350%;
+  text-shadow: 3px 3px 5px #111;
+}
+
+article.book-preview h3 {
+  color: #EFEFEF;
+  text-shadow: 3px 3px 5px #111;
+  font-size: 250%;
+}
+
+article.book-preview h4 {
+  font-size: 200%;
+  margin-top: 2%;
+  font-style: italic;
+}
+
+article.book-preview p {
+  margin-top: 5%;
+  text-shadow: none;
 }
