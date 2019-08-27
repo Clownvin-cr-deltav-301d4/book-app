@@ -7,17 +7,13 @@
   <link rel="stylesheet" href="reset.css">
   <link rel="stylesheet" href="styles.css">
   <script defer src="app.js"></script>
-  <title>Search Results</title>
+  <title>Error</title>
 </head>
 <body>
   <%- include('layout/header') %>
   <section id="content">
-      <h3 class="page-title"> Search Results </h3>
-    <ol>
-      <% for(const result of results) {%>
-        <li><%- include('partials/book_preview', {book: result}) %></li>
-      <% } %>
-    </ol>   
+      <h3 class="page-title"> <%= status %> </h3>
+      <%= error %>
   </section>
 </body>
 </html>
