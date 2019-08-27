@@ -1,18 +1,25 @@
 <!DOCTYPE html>
-<html lang="en" style="color:lawngreen; background-color: black">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Document</title>
+  <%- include('partials/head') %>
+  <title>Search Books</title>
 </head>
 <body>
-  <h1>Hello</h1>
-  <h3>Look at deez numbers...</h3>
-  <ul>
-    <% list.forEach(num => { %>
-      <li> <%= num %> </li>
-    <% }); %>
-  </ul>
+  <%- include('layout/header') %>
+  <section id="content">
+      <h3 class="page-title"> Search by Title or Author </h3>
+
+      <form action="/searches" method="post">
+        <input type="text" name="query" placeholder="Enter name..."/>
+        <br>
+        <label for="title">Title</label>
+        <input type="radio" id="title" name="search_type" value="title" checked>
+        <br>
+        <label for="author">Author</label>
+        <input type="radio" id="author" name="search_type" value="author">
+        <br>
+        <input type="submit" value="Search the Google Books API"></input>
+      </form>
+  </section>
 </body>
 </html>

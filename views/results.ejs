@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('partials/head') %>
+  <title>Search Results</title>
+</head>
+<body>
+  <%- include('layout/header') %>
+  <section id="content">
+      <h3 class="page-title"> Search Results </h3>
+    <ol>
+      <% for(const result of results) {%>
+        <li><%- include('partials/book_preview', {book: result}) %></li>
+      <% } %>
+    </ol>   
+  </section>
+</body>
+</html>

@@ -1,0 +1,15 @@
+<article class='book-preview'>
+  <img src='<%=book.thumbnail%>'>
+  <h2><%= book.title %></h2>
+  <% if(book.subtitle) { %>
+    <h3><%= book.subtitle %></h3>
+  <% } %>
+  <h4>
+    <% if (book.authors) { %>
+    <%= book.authors.join(', '); %>
+    <% } else { %>
+    <%= book.publisher %>
+    <% } %>
+  </h4>
+  <p><%= book.description %></p>
+</article>
