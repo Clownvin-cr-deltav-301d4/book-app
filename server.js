@@ -13,7 +13,7 @@
 
   app.set('view engine', 'ejs');
   app.use(express.static('./public'));
-  app.use(express.urlencoded({extended: true}));
+  app.use(express.urlencoded({ extended: true }));
 
   function handleError(error, response) {
     response.status(error.status || 500).send(error.message);
@@ -198,7 +198,16 @@
   });
 
   app.post('/search', (req, res) => {
-    res.send(req.body);
+    console.log(req.body);
+    let query = req.body.query.replace(' ', '+');
+    if (req.body.search_type === 'author') {
+      query = `inauthor:${query}`;
+    }
+    superagent.get(`https://www.googleapis.com/books/v1/volumes?q=${query}`).then(results => {
+      console.log(results.body.items);
+      console.log(Object.keys(results.body.items));
+      res.render('results', results.body.items);
+    });
   });
 
   const PORT = process.env.PORT || 3000;
