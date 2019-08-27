@@ -12,6 +12,8 @@
   const superagent = require('superagent');
 
   app.set('view engine', 'ejs');
+  app.use(express.static('./public'));
+  app.use(express.urlencoded({extended: true}));
 
   function handleError(error, response) {
     response.status(error.status || 500).send(error.message);
@@ -192,7 +194,11 @@
   };
 
   app.get('/', (req, res) => {
-    res.render('index', {list: [1, 2, 3, 4, 5]});
+    res.render('index');
+  });
+
+  app.post('/search', (req, res) => {
+    res.send(req.body);
   });
 
   const PORT = process.env.PORT || 3000;
