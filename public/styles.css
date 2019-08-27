@@ -10,6 +10,7 @@ body {
   right: 0;
   height: 10vh;
   background-color: black;
+  z-index: 1000;
 }
 
 #content {
@@ -55,4 +56,18 @@ input:not([type=radio]) {
 input[type=submit] {
   background-color: black;
   color: white;
+}
+
+article.book-preview {
+  border-radius: 15px;
+  width: 33%;
+  min-height: 10vh;
+  text-align: center;
+  margin: 5% auto;
+  padding: 5%;
+  background-color: #666;
+}
+
+article.book-preview h2 {
+  font-size: 350%;
 }
