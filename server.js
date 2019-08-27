@@ -39,28 +39,32 @@
   });
 
   app.post('/searches', (req, res) => {
-    console.log(req.body);
-    let query = req.body.query.replace(' ', '+');
-    if (req.body.search_type === 'author') {
-      query = `inauthor:${query}`;
+    try {
+      console.log(req.body);
+      let query = req.body.query.replace(' ', '+');
+      if (req.body.search_type === 'author') {
+        query = `inauthor:${query}`;
+      }
+      superagent.get(`https://www.googleapis.com/books/v1/volumes?q=${query}`)
+        .then(results => {
+          const books = results.body.items.map(book => new Book(book.volumeInfo.title, book.volumeInfo.subtitle, book.volumeInfo.authors, book.volumeInfo.publisher, book.volumeInfo.description, book.volumeInfo.imageLinks.thumbnail));
+          res.render('results', { results: books });
+        })
+        .catch(error => {
+          console.log(error);
+          res.render('error', { status: 500, error: error.message });
+        });
+    } catch (error) {
+      res.render('error', { status: 500, error: error.message });
     }
-    superagent.get(`https://www.googleapis.com/books/v1/volumes?q=${query}`)
-      .then(results => {
-        const books = results.body.items.map(book => new Book(book.volumeInfo.title, book.volumeInfo.subtitle, book.volumeInfo.authors, book.volumeInfo.publisher, book.volumeInfo.description, book.volumeInfo.imageLinks.thumbnail));
-        res.render('results', {results: books});
-      })
-      .catch(error => {
-        console.log(error);
-        res.render('error', {status: 500, error: error.message});
-      });
   });
 
   app.post('*', (req, res) => {
-    res.render('error', {status: 404, error: 'This path could not be found...'});
+    res.render('error', { status: 404, error: 'This path could not be found...' });
   });
 
   app.get('*', (req, res) => {
-    res.render('error', {status: 404, error: 'This path could not be found...'});
+    res.render('error', { status: 404, error: 'This path could not be found...' });
   });
 
   const PORT = process.env.PORT || 3000;
